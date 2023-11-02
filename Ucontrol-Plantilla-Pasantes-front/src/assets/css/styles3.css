@@ -1,0 +1,51 @@
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+input[type=number] { -moz-appearance:textfield; }
+
+/* clase para dar tamaños fijos a los botones de bootstrap*/
+.custom-btn{
+  width: 50px !important;
+}
+
+/* clase para dar tamaños fijos a los botones de bootstrap*/
+.custom-btn{
+  width: 50px !important;
+}
+
+.columna1{
+  width: 80%;
+}
+
+.columna2{
+  width: 20%;
+}
+.zindex99{
+  z-index: 999 !important;
+}
+.zindex99max{
+  z-index: 999999999 !important;
+}
+/* esta clase funcionara para crear un scroll en un cuadro donde se aplique la clase */
+.divscrolllist{
+  overflow: scroll;
+  width: 100%;
+  height: 50%;
+}
+/*estilos para dar tamaño fijo a la columna de la tabla*/
+#tabla-column{
+  width: 10%;
+}
+#tabla-column-hora{
+  width: 5%;
+}
+#tabla-column-minutos{
+  width: 15%;
+}
+/*para mostrar la pestaña de activos*/
+.column-active{
+  width: 15%;
+}
