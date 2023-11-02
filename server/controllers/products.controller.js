@@ -1,15 +1,15 @@
 const measureModel = require('../models/measure.model');
-const usersModel = require('../models/users.model');
+const companyModel = require('../models/company.model');
 const productsModel = require('../models/products.model');
 const inventoryModel = require('../models/inventory.model');
 const bodegaModel = require('../models/bodega.model');
 
 async function addProducts(req, res) {
     const {product_Name, BuyPrice, Active, Inventariable} = req.body;   
-    const user = await usersModel.findOne({Company: "ucontrol"});
+    const company = await companyModel.findOne({Company: "ucontrol"});
     try{
-        if(!user){
-            return res.status(404).send({message: "User not found with Company: ucontrol"});
+        if(!company){
+            return res.status(404).send({message: "Company not found with Company: ucontrol"});
         }
 
         const measure = await measureModel.findOne({Name: "Kg"});
@@ -24,7 +24,7 @@ async function addProducts(req, res) {
 
         const newProducts = new productsModel({
             product_Name:product_Name,
-            Company: user._id,
+            Company: company._id,
             BuyPrice: BuyPrice,
             Active: Active,
             Inventariable: Inventariable,
@@ -33,12 +33,12 @@ async function addProducts(req, res) {
 
         await newProducts.save();
 
-        ;   
+          
         const principal = await bodegaModel.findOne({bodegaName: "Principal"}); 
         const reserva = await bodegaModel.findOne({bodegaName: "Reserva"}); 
 
-        const inventory1 = await createInventory(newProducts._id, user._id, 100, principal._id);
-        const inventory2 = await createInventory(newProducts._id, user._id, 0, reserva._id);
+        const inventory1 = await createInventory(newProducts._id, company._id, 100, principal._id);
+        const inventory2 = await createInventory(newProducts._id, company._id, 0, reserva._id);
 
         console.log("Products added successfully");
         return res.status(200).send({message: "Products added successfully", products: newProducts})

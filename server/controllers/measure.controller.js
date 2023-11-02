@@ -1,10 +1,11 @@
 const measureModel = require('../models/measure.model');
-const usersModel = require('../models/users.model');
+const companyModel  = require('../models/company.model');
+const { copy } = require('../routes/saleorderinvoice.routes');
 
 async function addMeasure(req, res) {
     try {
         // Espera a que se resuelva la promesa y obtén el usuario con Company: "ucontrol"
-        const user = await usersModel.findOne({ Company: "ucontrol" });
+        const company = await companyModel.findOne({ Company: "ucontrol" });
 
         if (!user) {
             // Si no se encuentra el usuario, devuelve un error
@@ -17,7 +18,7 @@ async function addMeasure(req, res) {
         const newMeasure = new measureModel({
             Name: Name,
             Description: Description,
-            Company: user._id
+            Company: company._id
         });
 
         // Guarda la nueva medida en la base de datos

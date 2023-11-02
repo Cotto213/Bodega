@@ -9,6 +9,7 @@ const userRouter = require('./routes/user.routes');
 const measureRouter = require('./routes/measure.routes');
 const productsRouter = require('./routes/products.routes');
 const bodegaRouter = require('./routes/bodega.routes'); 
+const saleorderinvoiceRouter = require('./routes/saleorderinvoice.routes');
 
 const url ="mongodb+srv://Cotto213:Pa$$w0rd@inventory.hfpx6bs.mongodb.net/inventory?retryWrites=true&w=majority"
 
@@ -38,4 +39,6 @@ app.use('/api', userRouter);
 app.use('/api', measureRouter);
 app.use('/api', productsRouter);
 app.use('/api', bodegaRouter);
+app.use('/api', saleorderinvoiceRouter);
+
 
