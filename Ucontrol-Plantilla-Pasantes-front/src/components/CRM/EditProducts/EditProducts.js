@@ -4,21 +4,15 @@ import {
     Button
 } from "reactstrap";
 import { SWTAlertToast } from '../../Others/Alerts/Toast/Alerts';
-
-
-import { addProducts } from '../../../api/Products.Api';
 import { getMeasure } from '../../../api/Products.Api';
 
-export default function AddProducts(props) {
-    const { setModalShow, setresetList } = props
-    const [Data, setData] = useState({
-        Company: 'ucontrol', measureId: '', Active: false,
-        Inventariable: false,
-    })
+
+import { editProducts } from '../../../api/Products.Api';
+
+
+export default function EditProducts(props) {
+    const { setModalShow, setresetList, row } = props
     const [measures, setMeasures] = useState([])
-
-
-
     //___________________________almacenamos la informacion______________
     useEffect(() => {
         getMeasure().then(data => {
@@ -26,14 +20,33 @@ export default function AddProducts(props) {
             setMeasures(data);
         });
     }, []);
-    const AddProducts = async () => {
-        const Result = await addProducts(Data)
+
+    const [Data, setData] = useState(
+        {
+            Company: 'ucontrol',
+            _id: row._id,
+            product_Name: row.product_Name,
+            BuyPrice: row.BuyPrice,
+            Active: row.Active,
+            Inventariable: row.Inventariable,
+            measureId: row.measureId
+        })
+
+    //___________________________almacenamos la informacion______________
+
+    const EditProduct = async () => {
+
+        console.log(Data, "datos para editar");
+
+
+
+        const Result = await editProducts(Data)
         if (Result.message) {
             SWTAlertToast("error", Result.message);
 
         }
         else {
-            SWTAlertToast("success", `Datos Almacenado con exito`);
+            SWTAlertToast("success", `Datos Actualizado con exito`);
             setModalShow(false)
             setresetList(true)
         }
@@ -55,7 +68,7 @@ export default function AddProducts(props) {
                         <div className='col-md-6'>
                             <Input
                                 type='text'
-                                placeholder='ingrese el nombre del producto'
+                                placeholder='ingrese el nombre del carro'
                                 value={Data.product_Name}
                                 onChange={(e) => { setData({ ...Data, product_Name: e.target.value }) }}
                             />
@@ -72,7 +85,7 @@ export default function AddProducts(props) {
                         <div className='col-md-6'>
                             <Input
                                 type='number'
-                                placeholder='ingrese el precio del producto'
+                                placeholder='ingrese el nombre del carro'
                                 value={Data.BuyPrice}
                                 onChange={(e) => { setData({ ...Data, BuyPrice: e.target.value }) }}
                             />
@@ -82,7 +95,7 @@ export default function AddProducts(props) {
                                 onChange={(e) => setData({ ...Data, measureId: e.target.value })}
                             >
                                 <option value="">Seleccione una medida</option>
-                                {measures.map((measure) => (
+                                {measures.map(measure => (
                                     <option key={measure._id} value={measure._id}>
                                         {measure.Name}
                                     </option>
@@ -93,69 +106,40 @@ export default function AddProducts(props) {
                     </div>
 
                 </div>
-
                 <div className='col-12'>
                     <div className='form-group row'>
-                        <label className='control-label text-right col-md-4' style={{ color: "black" }}>
+                        <label className='control-label text-right col-md-4' style={{ color: "black" }} >
                             Active
                         </label>
-                        <div className='col-md-6'>
-                            <label>
-                                <input
-                                    type='radio'
-                                    name='active'
-                                    value='si'
-                                    checked={Data.Active}
-                                    onChange={() => { setData({ ...Data, Active: true }) }}
-                                />
-                                Sí
-                            </label>
-                            <label>
-                                <input
-                                    type='radio'
-                                    name='active'
-                                    value='no'
-                                    checked={!Data.Active}
-                                    onChange={() => { setData({ ...Data, Active: false }) }}
-                                />
-                                No
-                            </label>
-                        </div>
+                        <input
+                            type='checkbox'
+                            checked={Data.Active}
+                            onChange={(e) => { setData({ ...Data, Active: e.target.checked }) }}
+                        />
+                        Sí
+
                     </div>
+
                 </div>
                 <div className='col-12'>
                     <div className='form-group row'>
-                        <label className='control-label text-right col-md-4' style={{ color: "black" }}>
+                        <label className='control-label text-right col-md-4' style={{ color: "black" }} >
                             Inventariable
                         </label>
-                        <div className='col-md-6'>
-                            <label>
-                                <input
-                                    type='radio'
-                                    name='inventariable'
-                                    value='si'
-                                    checked={Data.Inventariable}
-                                    onChange={() => { setData({ ...Data, Inventariable: true }) }}
-                                />
-                                Sí
-                            </label>
-                            <label>
-                                <input
-                                    type='radio'
-                                    name='inventariable'
-                                    value='no'
-                                    checked={!Data.Inventariable}
-                                    onChange={() => { setData({ ...Data, Inventariable: false }) }}
-                                />
-                                No
-                            </label>
-                        </div>
+                        <input
+                            type='checkbox'
+                            checked={Data.Inventariable}
+                            onChange={(e) => { setData({ ...Data, Inventariable: e.target.checked }) }}
+                        />
+                        Sí
+
                     </div>
+
                 </div>
 
                 < Button
                     style={{ marginLeft: 2 }}
-                    onClick={() => { AddProducts() }}
+                    onClick={() => { EditProduct() }}
 
                 >Guardar</Button>
 

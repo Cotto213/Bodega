@@ -32,7 +32,29 @@ try{
 }
 
 }
+async function getBodega(req,res){
 
+    try{
+
+      const foundCompany = await companyModel.findOne({ Company: 'ucontrol' });
+
+      if (!foundCompany) {
+        return res.status(404).send({ message: "Company not found with name: " + company });
+    }
+    const listBodega = await bodegaModel.find({Company: foundCompany._id}, ['bodegaName']);   
+    console.log("List of bodegas:", listBodega); // Agrega este log para verificar las medidas obtenidas
+    res.status(200).send(listBodega);
+} catch (error) {
+    console.error("Error retrieving bodegas:", error);
+    res.status(500).send({ message: "Internal Server Error" });
+
+
+
+
+}
+
+}
 module.exports = {   
-addBodega
+addBodega,
+getBodega
 }

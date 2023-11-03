@@ -43,13 +43,11 @@ async function getMeasure(req,res){
         return res.status(404).send({ message: "Company not found with name: " + company });
     }
     const listMeasure = await measureModel.find({Company: foundCompany._id}, ['Name']);   
+    console.log("List of measures:", listMeasure); // Agrega este log para verificar las medidas obtenidas
     res.status(200).send(listMeasure);
-
-}catch(error){
-    console.error("Error retrieving products:", error);
+} catch (error) {
+    console.error("Error retrieving measures:", error);
     res.status(500).send({ message: "Internal Server Error" });
-
-
 }
 
 

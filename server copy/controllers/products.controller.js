@@ -76,7 +76,7 @@ async function getProducts(req, res) {
         }
 
         // Encuentra todos los productos que pertenecen a la compañía especificada
-        const listProducts = await productsModel.find({ Company: foundCompany._id }, ["product_Name", "BuyPrice", "Active", "Inventariable"]);
+        const listProducts = await productsModel.find({ Company: foundCompany._id }, ["product_Name", "BuyPrice", "Active", "Inventariable", "measure_alfonso"]);
 
         // Envia los productos encontrados como respuesta
         res.status(200).send(listProducts);
@@ -86,9 +86,61 @@ async function getProducts(req, res) {
     }
 }
 
+async function editProducts(req,res){
+
+    const { product_Name, BuyPrice, Active, Inventariable, measureId, _id } = req.body;
+    const company = await companyModel.findOne({Company: "ucontrol"});
+    try{
+        if(!company){
+            return res.status(404).send({message: "Company not found with Company: ucontrol"});
+        }
+
+        const measure = await measureModel.findById(measureId);
+        if(!measure){
+            return res.status(404).send({message: "Measure not found with Name: " + measureId}); 
+        }
+
+        console.log("Request body:", req.body);
+        if(typeof Active !== "boolean"){
+            return res.status(400).send({message: "Active field must be a boolean value"});
+        }
+
+        const sendData = {
+            product_Name:product_Name,
+            Company: company._id,
+            BuyPrice: BuyPrice,
+            Active: Active,
+            Inventariable: Inventariable,
+            measure_alfonso: measure._id
+        };
+
+        const result= await productsModel.findByIdAndUpdate({_id:_id},sendData)
+
+        
+        console.log("Products updated successfully", result);
+        return res.status(200).send({message: "Products updated successfully", result})
+    }catch(error){
+        console.error("Error adding products:", error); 
+        return res.status(500).send({message: "Internal Server Error"});
+    }
+
+}
+
+async function deleteProducts(req,res){
+    const { _id } = req.body;
+    if (!_id) { return res.status(500).send({ message: "no existe el identificador principal" }) }
+
+
+    await productsModel.findByIdAndDelete({_id:_id})
+    await inventoryModel.deleteMany({products_Alfonso: _id})
+    return res.status(500).send({ result: req.body })
+}
+
 
 
 module.exports = {
     addProducts,
-    getProducts
+    getProducts,
+    editProducts,
+    deleteProducts
 };
