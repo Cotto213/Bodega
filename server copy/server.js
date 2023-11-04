@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const autoIncrement = require('mongoose-auto-increment');
 
 const app = express();
 app.use(cors());
@@ -14,32 +15,25 @@ const inventoryRouter = require('./routes/inventory.routes');
 
 const url ="mongodb+srv://Cotto213:Pa$$w0rd@inventory.hfpx6bs.mongodb.net/inventory?retryWrites=true&w=majority"
 
-
-app.listen(8000, () => console.log("Server started on port 8000"));
-
-
-
-    const connectDB =async()=>{
-
-try{
-
-    await mongoose.connect(url, 
-        {useNewUrlParser: true, 
-            useUnifiedTopology: true});
-
-            console.log("MongoDB connected");
-        }catch(err){
-    console.log(err.message);
+const connectDB = async () => {
+    try {
+        return mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+    } catch (err) {
+        console.log(err.message);
+    }
 }
 
-    }
+connectDB().then((dbConnection) => {
+    autoIncrement.initialize(dbConnection);
 
-    connectDB();
+    app.use('/api', userRouter);
+    app.use('/api', measureRouter);
+    app.use('/api', productsRouter);
+    app.use('/api', bodegaRouter);
+    app.use('/api', saleorderinvoiceRouter);
+    app.use('/api', inventoryRouter);
 
-app.use('/api', userRouter);
-app.use('/api', measureRouter);
-app.use('/api', productsRouter);
-app.use('/api', bodegaRouter);
-app.use('/api', saleorderinvoiceRouter);
-app.use('/api', inventoryRouter);
-
+    app.listen(8000, () => console.log("Server started on port 8000"));
+}).catch((err) => {
+    console.error("Error connecting to the database:", err);
+});

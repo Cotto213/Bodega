@@ -4,6 +4,7 @@ import DataTableExtensions from 'react-data-table-component-extensions';
 import Modal from '../../Others/Modal/Modal';
 import AddProducts from '../AddProducts/AddProducts';
 import EditProducts from '../EditProducts/EditProducts';
+import AddInvoice from '../AddInvoice/AddInvoice';
 import { editProducts, getMeasure, getInventory } from '../../../api/Products.Api';
 import { SWTAlertToast } from '../../Others/Alerts/Toast/Alerts';
 import { deleteProducts } from '../../../api/Products.Api';
@@ -78,6 +79,19 @@ export default function ListPageExample(props) {
             />
         );
     };
+
+    const addInvoice = () => {
+        setModalShow(true);
+        setModalTitle("ESTAMOS AGREGANDO PRODUCTOS");
+        setFullWidth(false);
+        setModalContent(
+            <AddInvoice
+                setModalShow={setModalShow}
+                setResetList={setResetList}
+            />
+        );
+
+    }
 
     const EditProduct = (row) => {
         setModalShow(true);
@@ -189,6 +203,11 @@ export default function ListPageExample(props) {
             <div className='row'>
                 <div className='col-12'>
                     <button onClick={() => addProducts()}>Agregar</button>
+                </div>
+            </div>
+            <div className='row'>
+                <div className='col-12'>
+                    <button onClick={() => addInvoice()}>Agregar Factura</button>
                 </div>
             </div>
             <div className='row'>
