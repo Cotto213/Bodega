@@ -8,7 +8,7 @@ try{
 
     const company = await companyModel.findOne({Company: "ucontrol"});
 
-    if(!user){
+    if(!company){
         return res.status(404).send({message: "User not found with Company: ucontrol"});
     }
 

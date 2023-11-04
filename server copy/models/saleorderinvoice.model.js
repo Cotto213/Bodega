@@ -9,7 +9,7 @@ const saleOrderInvoiceSchema = Schema({
     total: {type: Number, required: true},
     Company: {
         type: Schema.Types.ObjectId,
-        ref: "Users",
+        ref: "Company",
         required: true
     },
     CreationDate: {type: Date, required: true},

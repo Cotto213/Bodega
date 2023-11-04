@@ -26,9 +26,10 @@ export default function AddInvoice(props) {
             ...Data,
             total: Data.total,
             state: 'Creada',
-            product_alfonso: Data.productId // Include the selected product's _id here
+            quantity: Data.quantity, // Pass the quantity parameter here
+            product_alfonso: Data.productId
         };
-    
+
         try {
             const Result = await addSaleOrderInvoice(invoiceData);
             console.log(Result);
@@ -36,6 +37,7 @@ export default function AddInvoice(props) {
             console.error(error);
         }
     };
+
     const handleQuantityChange = (e) => {
         const quantity = e.target.value;
         const product = products.find(product => product._id === Data.productId);

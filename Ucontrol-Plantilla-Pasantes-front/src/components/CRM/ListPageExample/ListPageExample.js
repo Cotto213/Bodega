@@ -19,7 +19,7 @@ export default function ListPageExample(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [inventoryData, setInventoryData] = useState([]);
 
-    
+
     useEffect(() => {
         getMeasure().then(data => {
             console.log(data); // Verifica los datos que recibes de la API
@@ -32,32 +32,10 @@ export default function ListPageExample(props) {
         });
     }, []);
 
-    const handleActiveChange = async (row) => {
-        const newStatus = !row.Active;
-        const updatedProduct = { ...row, Active: newStatus };
-        const result = await editProducts(updatedProduct);
-        if (result.success) {
-            setResetList(true);
-        } else {
-            SWTAlertToast("error", result.message);
-        }
-    };
-
-    const handleInventariableChange = async (row) => {
-        const newStatus = !row.Inventariable;
-        const updatedProduct = { ...row, Inventariable: newStatus };
-        const result = await editProducts(updatedProduct);
-        if (result.success) {
-            setResetList(true);
-        } else {
-            SWTAlertToast("error", result.message);
-        }
-    };
     const getStock = (productId) => {
         const inventoryItem = inventoryData.find((item) => item.products_Alfonso === productId);
         return inventoryItem ? inventoryItem.Stock : 'N/A';
     };
-   
 
     const getMeasureName = (measureId) => {
         const measure = measures.find((measure) => measure._id.toString() === measureId);
@@ -164,8 +142,9 @@ export default function ListPageExample(props) {
             cell: (row) => (
                 <input
                     type="checkbox"
+                    disabled
                     checked={row.Active}
-                    onChange={() => handleActiveChange(row)}
+
                 />
             ),
         },
@@ -174,9 +153,11 @@ export default function ListPageExample(props) {
             selector: "Inventariable",
             cell: (row) => (
                 <input
+                    style={{ color: "red" }}
                     type="checkbox"
+                    disabled
                     checked={row.Inventariable}
-                    onChange={() => handleInventariableChange(row)}
+
                 />
             ),
         },
